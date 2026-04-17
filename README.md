@@ -13,7 +13,6 @@ A complete Employee Leave Management System built with HTML, CSS, JavaScript, My
 ✅ Responsive Design - Works on desktop and mobile
 🛠️ Tech Stack
 
-Copy code
 Frontend: HTML5, CSS3, Vanilla JavaScript
 Backend: PHP 8+, MySQL 8+
 Database: MySQL
@@ -28,8 +27,6 @@ Installation Steps
 Setup Database
 
 bash
-
-Copy code
 # 1. Start XAMPP (Apache + MySQL)
 # 2. Open phpMyAdmin (http://localhost/phpmyadmin)
 # 3. Create database and run SQL:
@@ -38,21 +35,16 @@ Copy the SQL from database.sql and execute it.
 Project Setup
 
 bash
-
-Copy code
 # 1. Copy all files to htdocs/leave-management/
 # 2. Update config.php with your DB credentials
 # 3. Access: http://localhost/leave-management/
 Demo Login Credentials
 
-
-Copy code
 Employee 1: employee1 / password
 Employee 2: employee2 / password  
 Manager:    manager1 / password
 📁 Project Structure
 
-Copy code
 leave-management/
 ├── database.sql          # MySQL database setup
 ├── config.php           # Database connection
@@ -78,8 +70,6 @@ Calendar → Company-wide view
 🔧 API Endpoints
 All API calls handled via api.php?action=...
 
-
-Copy code
 GET    api.php?action=get_leave_types
 POST   api.php?action=submit_leave
 GET    api.php?action=get_pending_requests
