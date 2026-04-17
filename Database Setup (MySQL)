@@ -1,0 +1,70 @@
+-- Create database
+CREATE DATABASE leave_management;
+USE leave_management;
+
+-- Users table
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('employee', 'manager') NOT NULL,
+    email VARCHAR(100),
+    full_name VARCHAR(100),
+    department VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Leave types table
+CREATE TABLE leave_types (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type_name VARCHAR(50) NOT NULL,
+    max_days INT DEFAULT 30,
+    description TEXT
+);
+
+-- Leave balances table
+CREATE TABLE leave_balances (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    leave_type_id INT,
+    balance_days DECIMAL(5,2) DEFAULT 0,
+    used_days DECIMAL(5,2) DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (leave_type_id) REFERENCES leave_types(id),
+    UNIQUE KEY unique_user_leave (user_id, leave_type_id)
+);
+
+-- Leave requests table
+CREATE TABLE leave_requests (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    leave_type_id INT,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    total_days DECIMAL(5,2),
+    reason TEXT,
+    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+    manager_comments TEXT,
+    manager_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (leave_type_id) REFERENCES leave_types(id),
+    FOREIGN KEY (manager_id) REFERENCES users(id)
+);
+
+-- Insert sample data
+INSERT INTO users (username, password, role, email, full_name, department) VALUES
+('employee1', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'employee', 'emp1@company.com', 'John Doe', 'Engineering'),
+('employee2', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'employee', 'emp2@company.com', 'Jane Smith', 'HR'),
+('manager1', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'manager', 'mgr1@company.com', 'Mike Johnson', 'Management');
+
+INSERT INTO leave_types (type_name, max_days, description) VALUES
+('Vacation', 20, 'Annual vacation leave'),
+('Sick Leave', 10, 'Paid sick leave'),
+('Personal', 5, 'Personal reasons');
+
+-- Initialize leave balances
+INSERT INTO leave_balances (user_id, leave_type_id, balance_days) VALUES
+(1, 1, 15.00), (1, 2, 8.00), (1, 3, 3.00),
+(2, 1, 12.00), (2, 2, 6.00), (2, 3, 2.00);
